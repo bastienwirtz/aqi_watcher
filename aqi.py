@@ -3,14 +3,14 @@
 import settings
 
 from influxdb import InfluxDBClient
-from data_source import openweatermap, airnow, purpleair
+from data_source import openweathermap, airnow, purpleair
 
 purpleair_sensors = settings.PURPLEAIR_SENSORS.split(",")
 points = []
 
 # Get weather
 try:
-    points += openweatermap.get_points(settings.POSTCODE)
+    points += openweathermap.get_points(settings.POSTCODE)
 except Exception as error:
     print("fail to get weather data: %s", error)
 
