@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 
 import settings
+import logging
 
 from influxdb import InfluxDBClient
 from data_source import openweathermap, airnow, purpleair
@@ -12,20 +13,20 @@ points = []
 try:
     points += openweathermap.get_points(settings.POSTCODE)
 except Exception as error:
-    print("fail to get weather data: %s", error)
+    logging.warning("fail to get weather data: %s", error)
 
 # Get Air Quality Index
 try:
     points += airnow.get_points(settings.POSTCODE)
 except Exception as error:
-    print("fail to get Air Quality data: %s", error)
+    logging.warning("fail to get Air Quality data: %s", error)
 
 # Get Air Quality Index from purple air
 try:
     for sensor in purpleair_sensors:
         points += purpleair.get_points(sensor)
 except Exception as error:
-    print("fail to get Purple Air data: %s", error)
+    logging.warning("fail to get Purple Air data: %s", error)
 
 influx = InfluxDBClient(
     settings.INFLUXDB["URL"],
